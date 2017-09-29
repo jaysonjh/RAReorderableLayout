@@ -9,27 +9,27 @@
 import UIKit
 
 
-@objc public protocol RAReorderableLayoutDelegate: UICollectionViewDelegateFlowLayout {
-    @objc func collectionView(_ collectionView: UICollectionView, at: IndexPath, willMoveTo toIndexPath: IndexPath)
-    @objc func collectionView(_ collectionView: UICollectionView, at: IndexPath, didMoveTo toIndexPath: IndexPath)
-    @objc func collectionView(_ collectionView: UICollectionView, allowMoveAt indexPath: IndexPath) -> Bool
-    @objc func collectionView(_ collectionView: UICollectionView, at: IndexPath, canMoveTo: IndexPath) -> Bool
+public protocol RAReorderableLayoutDelegate: UICollectionViewDelegateFlowLayout {
+    func collectionView(_ collectionView: UICollectionView, at: IndexPath, willMoveTo toIndexPath: IndexPath)
+    func collectionView(_ collectionView: UICollectionView, at: IndexPath, didMoveTo toIndexPath: IndexPath)
+    func collectionView(_ collectionView: UICollectionView, allowMoveAt indexPath: IndexPath) -> Bool
+    func collectionView(_ collectionView: UICollectionView, at: IndexPath, canMoveTo: IndexPath) -> Bool
     
-    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, willBeginDraggingItemAt indexPath: IndexPath)
-    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, didBeginDraggingItemAt indexPath: IndexPath)
-    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, willEndDraggingItemTo indexPath: IndexPath)
-    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, didEndDraggingItemTo indexPath: IndexPath)
+    func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, willBeginDraggingItemAt indexPath: IndexPath)
+    func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, didBeginDraggingItemAt indexPath: IndexPath)
+    func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, willEndDraggingItemTo indexPath: IndexPath)
+    func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, didEndDraggingItemTo indexPath: IndexPath)
 }
 
 
-@objc public protocol RAReorderableLayoutDataSource: UICollectionViewDataSource {
-    @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
-    @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
+public protocol RAReorderableLayoutDataSource: UICollectionViewDataSource {
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     
-    @objc func collectionView(_ collectionView: UICollectionView, reorderingItemAlphaInSection section: Int) -> CGFloat
-    @objc func scrollTrigerEdgeInsetsInCollectionView(_ collectionView: UICollectionView) -> UIEdgeInsets
-    @objc func scrollTrigerPaddingInCollectionView(_ collectionView: UICollectionView) -> UIEdgeInsets
-    @objc func scrollSpeedValueInCollectionView(_ collectionView: UICollectionView) -> CGFloat
+    func collectionView(_ collectionView: UICollectionView, reorderingItemAlphaInSection section: Int) -> CGFloat
+    func scrollTrigerEdgeInsetsInCollectionView(_ collectionView: UICollectionView) -> UIEdgeInsets
+    func scrollTrigerPaddingInCollectionView(_ collectionView: UICollectionView) -> UIEdgeInsets
+    func scrollSpeedValueInCollectionView(_ collectionView: UICollectionView) -> CGFloat
 }
 
 public extension RAReorderableLayoutDataSource {
@@ -87,12 +87,12 @@ open class RAReorderableLayout: UICollectionViewFlowLayout, UIGestureRecognizerD
         }
     }
     
-     public weak var delegate: RAReorderableLayoutDelegate? {
+    public weak var delegate: RAReorderableLayoutDelegate? {
         get { return collectionView?.delegate as? RAReorderableLayoutDelegate }
         set { collectionView?.delegate = delegate }
     }
     
-     public weak var dataSource: RAReorderableLayoutDataSource? {
+    public weak var dataSource: RAReorderableLayoutDataSource? {
         set { collectionView?.dataSource = dataSource }
         get { return collectionView?.dataSource as? RAReorderableLayoutDataSource }
     }
@@ -207,17 +207,17 @@ open class RAReorderableLayout: UICollectionViewFlowLayout, UIGestureRecognizerD
     
     override open func layoutAttributesForElements(in rect: CGRect) -> [UICollectionViewLayoutAttributes]? {
         guard let attributesArray = super.layoutAttributesForElements(in: rect) else { return nil }
-
+        
         attributesArray.filter {
             $0.representedElementCategory == .cell
-        }.filter {
-            $0.indexPath == (cellFakeView?.indexPath)
-        }.forEach {
-            // reordering cell alpha
-            
-            $0.alpha = dataSource?.collectionView(self.collectionView!, reorderingItemAlphaInSection: $0.indexPath.section) ?? 0
+            }.filter {
+                $0.indexPath == (cellFakeView?.indexPath)
+            }.forEach {
+                // reordering cell alpha
+                
+                $0.alpha = dataSource?.collectionView(self.collectionView!, reorderingItemAlphaInSection: $0.indexPath.section) ?? 0
         }
-
+        
         return attributesArray
     }
     
@@ -292,7 +292,7 @@ open class RAReorderableLayout: UICollectionViewFlowLayout, UIGestureRecognizerD
             
             // did move item
             self.delegate?.collectionView(self.collectionView!, at: atIndexPath, didMoveTo: toIndexPath)
-            }, completion:nil)
+        }, completion:nil)
     }
     
     @objc internal func continuousScroll() {
@@ -324,7 +324,7 @@ open class RAReorderableLayout: UICollectionViewFlowLayout, UIGestureRecognizerD
                 fakeCell.center.x = self.fakeCellCenter!.x + self.panTranslation!.x
                 self.collectionView?.contentOffset.x += scrollRate
             }
-            }, completion: nil)
+        }, completion: nil)
         
         moveItemIfNeeded()
     }
@@ -370,8 +370,8 @@ open class RAReorderableLayout: UICollectionViewFlowLayout, UIGestureRecognizerD
             }
             collectionView.addGestureRecognizer(self.longPress!)
             collectionView.addGestureRecognizer(self.panGesture!)
-            }
         }
+    }
     
     open func cancelDrag() {
         cancelDrag(nil)
@@ -427,7 +427,7 @@ open class RAReorderableLayout: UICollectionViewFlowLayout, UIGestureRecognizerD
             fakeCellCenter = cellFakeView!.center
             
             invalidateLayout()
-
+            
             cellFakeView?.pushFowardView()
             
             // did begin drag item
@@ -547,7 +547,7 @@ private class RACellFakeView: UIView {
             options: [.curveEaseInOut, .beginFromCurrentState],
             animations: {
                 self.bounds = bounds
-            },
+        },
             completion: nil
         )
     }
@@ -567,10 +567,10 @@ private class RACellFakeView: UIView {
                 shadowAnimation.isRemovedOnCompletion = false
                 shadowAnimation.fillMode = kCAFillModeForwards
                 self.layer.add(shadowAnimation, forKey: "applyShadow")
-            },
+        },
             completion: { _ in
                 self.cellFakeHightedView?.removeFromSuperview()
-            }
+        }
         )
     }
     
@@ -588,10 +588,10 @@ private class RACellFakeView: UIView {
                 shadowAnimation.isRemovedOnCompletion = false
                 shadowAnimation.fillMode = kCAFillModeForwards
                 self.layer.add(shadowAnimation, forKey: "removeShadow")
-            },
+        },
             completion: { _ in
                 completion?()
-            }
+        }
         )
     }
     
@@ -599,7 +599,7 @@ private class RACellFakeView: UIView {
         UIGraphicsBeginImageContextWithOptions(cell!.bounds.size, false, UIScreen.main.scale * 2)
         defer { UIGraphicsEndImageContext() }
         cell!.drawHierarchy(in: cell!.bounds, afterScreenUpdates: true)
-
+        
         return UIGraphicsGetImageFromCurrentImageContext()!
     }
 }
@@ -608,3 +608,4 @@ private class RACellFakeView: UIView {
 private func ~= (obj:NSObjectProtocol?, r:UIGestureRecognizer) -> Bool {
     return r.isEqual(obj)
 }
+
