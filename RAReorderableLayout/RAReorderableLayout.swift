@@ -10,21 +10,20 @@ import UIKit
 
 
 @objc public protocol RAReorderableLayoutDelegate: UICollectionViewDelegateFlowLayout {
-    @objc func collectionView(_ collectionView: UICollectionView, at: IndexPath, willMoveToIndexPath: IndexPath)
-    @objc func collectionView(_ collectionView: UICollectionView, at: IndexPath, didMoveToIndexPath: IndexPath)
-    @objc func collectionView(_ collectionView: UICollectionView, allowMoveAtIndexPath: IndexPath) -> Bool
-    @objc func collectionView(_ collectionView: UICollectionView, at: IndexPath, canMoveToIndexPath: IndexPath) -> Bool
+    @objc func collectionView(_ collectionView: UICollectionView, at: IndexPath, willMoveTo toIndexPath: IndexPath)
+    @objc func collectionView(_ collectionView: UICollectionView, at: IndexPath, didMoveTo toIndexPath: IndexPath)
+    @objc func collectionView(_ collectionView: UICollectionView, allowMoveAt indexPath: IndexPath) -> Bool
+    @objc func collectionView(_ collectionView: UICollectionView, at: IndexPath, canMoveTo: IndexPath) -> Bool
     
-    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, willBeginDraggingItemAtIndexPath: IndexPath)
-    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, didBeginDraggingItemAtIndexPath: IndexPath)
-    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, willEndDraggingItemToIndexPath: IndexPath)
-    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout,
-                              didEndDraggingItemToIndexPath: IndexPath)
+    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, willBeginDraggingItemAt indexPath: IndexPath)
+    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, didBeginDraggingItemAt indexPath: IndexPath)
+    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, willEndDraggingItemTo indexPath: IndexPath)
+    @objc func collectionView(_ collectionView: UICollectionView, collectionView layout: RAReorderableLayout, didEndDraggingItemTo indexPath: IndexPath)
 }
 
 
 @objc public protocol RAReorderableLayoutDataSource: UICollectionViewDataSource {
-    @objc func collectionView(_ collectionView: UICollectionView, cellForItemAtIndexPath: IndexPath) -> UICollectionViewCell
+    @objc func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell
     @objc func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int
     
     @objc func collectionView(_ collectionView: UICollectionView, reorderingItemAlphaInSection section: Int) -> CGFloat
